@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#FFFBF5"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Sonali Pal Portfolio</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,9 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;paddin
 a{color:inherit}
 :focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:8px}
 h1,h2,h3,p{margin:0}
-main,.wrap{max-width:1200px;margin:0 auto;display:flex;flex-direction:column}
+main,.wrap{width:100%;min-width:0;max-width:1200px;margin:0 auto;display:flex;flex-direction:column}
+main>*,.wrap>*{min-width:0;max-width:100%}
+html{overflow-x:clip}
 #detail{gap:clamp(16px,3vw,28px);padding-block:8px 40px}
 section[id],footer[id]{scroll-margin-top:84px}
 
@@ -471,6 +473,71 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .stat b{font-size:clamp(20px,7vw,24px)}
   .tcard{flex-basis:88%}
 }
+
+/* =====================================================================
+   MOBILE POLISH (added): tap behaviour, wide videos, landscape phones,
+   lighter effects, bigger edit-mode controls
+   ===================================================================== */
+html{-webkit-tap-highlight-color:transparent}
+a,button,[role=button],[role=tab],.tile,.vcard,.cpill,.phone{touch-action:manipulation}
+.rail{overscroll-behavior-x:contain}
+.mrow,.tk,.navin{overscroll-behavior-x:contain}
+@media (max-width:640px){
+  /* horizontal (16:9) videos shrink to the screen instead of running off it */
+  .rail{align-items:flex-start;scroll-padding-left:12px}
+  .vcard.wide{height:auto;width:calc(100vw - 80px);max-width:420px}
+  /* lighter blur on placeholders: smoother on older phones */
+  .ph::after{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  /* section tabs: a little more breathing room under the sticky bar */
+  section[id],footer[id]{scroll-margin-top:72px}
+  /* testimonial text stays readable */
+  .rm{min-height:44px;display:inline-flex;align-items:center}
+}
+/* phones held sideways */
+@media (max-height:520px) and (orientation:landscape){
+  .stage{height:min(78vh,360px)}
+  .hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
+  .hero h1{font-size:clamp(44px,9vw,80px)}
+  .lb-stage{height:calc(100svh - 40px)}
+  .lb .prev,.lb .next{top:50%;bottom:auto;translate:0 -50%}
+  .lb .prev{left:max(8px,env(safe-area-inset-left,0px))}
+  .lb .next{right:max(8px,env(safe-area-inset-right,0px))}
+}
+/* finger-sized controls for edit mode on touch screens */
+@media (pointer:coarse){
+  .mgear,.addbtn,.delbtn{min-height:40px}
+  .mgear{padding:8px 13px}
+  .ebar button{min-height:42px}
+}
+
+
+/* =====================================================================
+   DYNAMIC MOBILE SECTIONS (added)
+   ===================================================================== */
+.seg,.mbar{display:none}
+@media (max-width:640px){
+  /* hero: name and buttons first, video below */
+  .stage{order:0;margin-top:4px}
+  /* education / experience: one tab at a time */
+  body:not(.editing) .seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--cream);border:1px solid var(--line);border-radius:99px;padding:4px;margin:0 0 14px}
+  .seg button{min-height:44px;border-radius:99px;font-weight:700;font-size:13.5px;transition:background .25s,color .25s}
+  .seg button[aria-selected="true"]{background:var(--ink);color:#fff}
+  body:not(.editing) .jgrid[data-show="edu"] .jcol:nth-child(2),
+  body:not(.editing) .jgrid[data-show="exp"] .jcol:nth-child(1){display:none}
+  /* projects: swipe hint */
+  .report{touch-action:pan-y}
+  .pills .cpill[aria-selected="true"]{box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+  /* floating action bar */
+  body:not(.editing) .mbar{display:flex;position:fixed;z-index:70;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 12px);gap:8px;padding:6px;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:99px;box-shadow:0 14px 30px -12px rgba(60,40,20,.5);translate:0 140%;opacity:0;pointer-events:none;transition:translate .35s,opacity .35s}
+  .mbar.show{translate:0 0;opacity:1;pointer-events:auto}
+  .mbar a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border-radius:99px;font-weight:700;font-size:14px;text-decoration:none}
+  .mbar a:first-child{background:var(--cream)}
+  .mbar a:last-child{background:var(--pink)}
+  .mbar svg{width:15px;height:15px}
+  .toast{bottom:calc(env(safe-area-inset-bottom,0px) + 84px)}
+  #site{padding-bottom:70px}
+}
+
 /* touch screens: no hover lift */
 @media (hover:none){
   .vcard:hover,.tcard:hover,.fact:hover,.tile:hover,.btn:hover,.readmore:hover,.fbtn:hover,.cpill:hover{transform:none;box-shadow:none}
@@ -670,7 +737,7 @@ function goTo(id) {
 }
 (function () {
   const io = new IntersectionObserver(en => {
-    en.forEach(x => { if (x.isIntersecting) document.querySelectorAll("#navin a").forEach(a => { if (a.dataset.go === x.target.id) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); }); });
+    en.forEach(x => { if (x.isIntersecting) document.querySelectorAll("#navin a").forEach(a => { if (a.dataset.go === x.target.id) { a.setAttribute("aria-current", "true"); const n = $("#navin"); if (n && n.scrollWidth > n.clientWidth) n.scrollTo({ left: a.offsetLeft - (n.clientWidth - a.offsetWidth) / 2, behavior: reduce ? "auto" : "smooth" }); } else a.removeAttribute("aria-current"); }); });
   }, { rootMargin: "-35% 0px -55% 0px" });
   ["about", "projects", "journey", "kind", "contact"].forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
 })();
@@ -701,7 +768,7 @@ function rWork() {
   const W = SITE.work;
   $("#work").innerHTML = `${head("work", I.vid)}
     <div class="tabs"><span class="tab">${et("span", "work.tab")}</span></div>
-    <div class="tray"><div class="rail" id="vrail" tabindex="0" aria-label="Videos">${W.videos.map((v, i) => { const [w, h] = (v.ratio || "9/16").split("/").map(Number); return `<article class="vcard" style="aspect-ratio:${w || 9}/${h || 16}" data-vi="${i}">${v.tag || EDIT ? et("span", `work.videos.${i}.tag`, "tag") : ""}${v.poster ? `<img class="media" src="${esc(v.poster)}" alt="" loading="lazy" decoding="async">` : ph(i, "Your video")}${et("span", `work.videos.${i}.product`, "prod")}${playBtn()}${gear([["Video link", `work.videos.${i}.src`], ["Thumbnail link (optional)", `work.videos.${i}.poster`], ["Shape: 9/16 (vertical) or 16/9 (horizontal)", `work.videos.${i}.ratio`]])}${EDIT ? `<span class="xdel" style="top:44px">${delBtn("work.videos", i)}</span>` : ""}</article>`; }).join("")}${EDIT ? `<button class="addbtn addtile vadd" data-act="add" data-list="work.videos">+ Add video</button>` : ""}</div>
+    <div class="tray"><div class="rail" id="vrail" tabindex="0" aria-label="Videos">${W.videos.map((v, i) => { const [w, h] = (v.ratio || "9/16").split("/").map(Number); return `<article class="vcard${(w || 9) > (h || 16) ? " wide" : ""}" style="aspect-ratio:${w || 9}/${h || 16}" data-vi="${i}">${v.tag || EDIT ? et("span", `work.videos.${i}.tag`, "tag") : ""}${v.poster ? `<img class="media" src="${esc(v.poster)}" alt="" loading="lazy" decoding="async">` : ph(i, "Your video")}${et("span", `work.videos.${i}.product`, "prod")}${playBtn()}${gear([["Video link", `work.videos.${i}.src`], ["Thumbnail link (optional)", `work.videos.${i}.poster`], ["Shape: 9/16 (vertical) or 16/9 (horizontal)", `work.videos.${i}.ratio`]])}${EDIT ? `<span class="xdel" style="top:44px">${delBtn("work.videos", i)}</span>` : ""}</article>`; }).join("")}${EDIT ? `<button class="addbtn addtile vadd" data-act="add" data-list="work.videos">+ Add video</button>` : ""}</div>
       <button class="nav-arrow" id="vnext" aria-label="Scroll videos">${I.chev}</button>
       <div class="tray-foot">${et("p", "work.footLine")}<div class="copy"><input id="em1" ${EDIT ? 'data-p="email"' : "readonly"} aria-label="Email address" value="${esc(SITE.email)}"><button data-copy="em1">Copy</button></div></div></div>`;
 }
@@ -752,7 +819,7 @@ function rJourney() {
   const col = (key, icon) => `<div class="jcol"><h3><i></i>${et("span", `journey.${key === "education" ? "eduTitle" : "expTitle"}`)}</h3>
     <ol class="tl">${J[key].map((x, i) => `<li>${et("span", `journey.${key}.${i}.period`, "per")}${et("span", `journey.${key}.${i}.title`, "ttl")}${et("span", `journey.${key}.${i}.org`, "org")}${et("span", `journey.${key}.${i}.note`, "note")}${EDIT ? `<div style="margin-top:8px">${delBtn("journey." + key, i)}</div>` : ""}</li>`).join("")}</ol>
     ${EDIT ? `<div style="margin-top:18px">${addBtn("journey." + key, key === "education" ? "Add education" : "Add experience")}</div>` : ""}</div>`;
-  $("#journey").innerHTML = `${head("journey", I.cap)}<div class="jgrid">${col("education")}${col("experience")}</div>`;
+  $("#journey").innerHTML = `${head("journey", I.cap)}<div class="seg" role="tablist" aria-label="Background"><button role="tab" data-jt="edu" aria-selected="true">${esc(J.eduTitle)}</button><button role="tab" data-jt="exp" aria-selected="false">${esc(J.expTitle)}</button></div><div class="jgrid" id="jgrid" data-show="edu">${col("education")}${col("experience")}</div>`;
 }
 function rAbout() {
   const A = SITE.about;
@@ -798,7 +865,8 @@ let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() 
 let lastY = 0, curP = 0;
 function openProject(i) {
   const r = SITE.results.items[i]; if (!r) return;
-  curP = i; lastY = scrollY;
+  curP = i; const wasOpen = !$("#detail").hidden; if (!wasOpen) lastY = scrollY;
+  try { history[wasOpen ? "replaceState" : "pushState"]({ project: i }, ""); } catch (e) {}
   const P = `results.items.${i}`, D = P + ".details", n = SITE.results.items.length;
   const dd = r.details || {};
   $("#detail").innerHTML = `
@@ -822,8 +890,11 @@ function openProject(i) {
 function closeProject(restore = true) {
   document.querySelectorAll("#detail video").forEach(v => v.pause());
   $("#detail").hidden = true; $("#site").hidden = false;
+  try { if (history.state && history.state.project !== undefined) history.replaceState(null, ""); } catch (e) {}
   if (restore) scrollTo(0, lastY);
 }
+function leaveProject() { if (history.state && history.state.project !== undefined) history.back(); else closeProject(); }
+addEventListener("popstate", () => { if (!$("#detail").hidden) closeProject(); });
 
 /* ============================ lightbox ============================ */
 let lbCur = 0, lbOpener = null;
@@ -869,7 +940,7 @@ document.addEventListener("click", e => {
   if (act) {
     e.stopPropagation();
     const a = act.dataset.act;
-    if (a === "back") { closeProject(); return; }
+    if (a === "back") { leaveProject(); return; }
     if (a === "popx") { $("#pop").hidden = true; return; }
     if (a === "popok") { document.querySelectorAll("#popcard [data-fp]").forEach(inp => { const p = inp.dataset.fp; const old = getP(p); setP(p, typeof old === "number" ? (parseFloat(inp.value) || old) : inp.value.trim()); }); $("#pop").hidden = true; save(); renderAll(); toast("Updated"); return; }
     if (a === "add") {
@@ -926,13 +997,13 @@ document.addEventListener("click", e => {
 let footTaps = 0, footT;
 function selectProject(i) {
   if (i === selP) return; selP = i;
-  document.querySelectorAll(".cpill").forEach((p, k) => p.setAttribute("aria-selected", k === i));
+  document.querySelectorAll(".cpill").forEach((p, k) => { p.setAttribute("aria-selected", k === i); if (k === i && p.parentElement.scrollWidth > p.parentElement.clientWidth) p.parentElement.scrollTo({ left: p.offsetLeft - (p.parentElement.clientWidth - p.offsetWidth) / 2, behavior: "smooth" }); });
   const rep = $("#report"); rep.classList.add("swap");
   setTimeout(() => { fillReport(); rep.classList.remove("swap"); }, 230);
 }
 document.addEventListener("keydown", e => {
   if (lb.classList.contains("open")) { if (e.key === "Escape") lbClose(); if (e.key === "ArrowLeft") lbShow(lbCur - 1); if (e.key === "ArrowRight") lbShow(lbCur + 1); return; }
-  if (e.key === "Escape") { if (!$("#pop").hidden) $("#pop").hidden = true; else if (!$("#detail").hidden) closeProject(); return; }
+  if (e.key === "Escape") { if (!$("#pop").hidden) $("#pop").hidden = true; else if (!$("#detail").hidden) leaveProject(); return; }
   if (EDIT && e.key === "Enter" && e.target.matches && e.target.matches("[contenteditable]") && !e.target.classList.contains("pre")) { e.preventDefault(); e.target.blur(); return; }
   if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("[data-pi],[data-ti]")) { e.preventDefault(); e.target.click(); }
 });
@@ -953,6 +1024,33 @@ document.addEventListener("scroll", e => {
   const i = Math.round(e.target.scrollLeft / tStep());
   document.querySelectorAll("#dots button").forEach((d, k) => k === i ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current"));
 }, true);
+
+
+/* ============================ dynamic mobile sections ============================ */
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("[data-jt]"); if (!b) return;
+  const g = $("#jgrid"); if (!g) return;
+  g.dataset.show = b.dataset.jt;
+  document.querySelectorAll("[data-jt]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+});
+(function () {
+  let x0 = 0, y0 = 0;
+  document.addEventListener("touchstart", e => { if (e.target.closest && e.target.closest("#report")) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; } }, { passive: true });
+  document.addEventListener("touchend", e => {
+    if (EDIT || !e.target.closest || !e.target.closest("#report") || e.target.closest("video")) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0, n = SITE.results.items.length;
+    if (Math.abs(dx) < 70 || Math.abs(dy) > 45 || n < 2) return;
+    selectProject((selP + (dx < 0 ? 1 : -1) + n) % n);
+  }, { passive: true });
+})();
+(function () {
+  const site = $("#site"); if (!site) return;
+  site.insertAdjacentHTML("beforeend", `<div class="mbar" id="mbar"><a href="#projects" data-go="projects">${I.folder} Projects</a><a href="mailto:${esc(SITE.email)}" data-email>${I.mail} Email me</a></div>`);
+  const bar = $("#mbar"); let pastHero = false, atFoot = false;
+  const upd = () => bar.classList.toggle("show", pastHero && !atFoot);
+  const io = new IntersectionObserver(en => en.forEach(x => { if (x.target.id === "hero") pastHero = !x.isIntersecting && x.boundingClientRect.top < 0; else atFoot = x.isIntersecting; upd(); }), { threshold: 0 });
+  io.observe($("#hero")); io.observe($("#contact"));
+})();
 
 /* ============================ init ============================ */
 renderAll();
